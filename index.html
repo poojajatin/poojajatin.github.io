@@ -102,6 +102,15 @@
         .note-section-bg {
             background-color: #FEF2F2; /* Lightest pink background */
         }
+        
+        .blessing-item {
+            position: relative;
+        }
+        .blessing-pin {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+        }
     </style>
 </head>
 
@@ -166,12 +175,15 @@
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="order-2 md:order-1">
                     <p class="text-lg mb-4">
-                        Our journey began not with a spark, but a comfortable warmth. Pooja, with her infectious laugh and boundless energy, first met Jatin, the calm and steady force, through mutual friends at a small gathering in Delhi. What started as casual conversations quickly evolved into late-night talks, sharing dreams, and exploring the city together.
+                        Our path to marriage was paved by the blessings and wisdom of our families. Pooja and Jatin were first introduced through a mutual family connection, beginning a dialogue rooted in respect, shared values, and compatible aspirations.
                     </p>
                     <p class="text-lg mb-4">
-                        From navigating the bustling streets of Chandni Chowk to quiet evenings discussing classic cinema, we found our lives harmonizing perfectly. Jatin loved how Pooja saw color in everything; Pooja admired Jatin's grounded wisdom. Four years later, under a sky full of stars, Jatin asked the question that set us on our path to forever.
+                        What followed was a beautiful period of discovery. Through video calls and occasional family gatherings, we exchanged thoughts on life, career, and future goals, realizing how perfectly our temperaments complement one another—Pooja’s spirited warmth balancing Jatin's grounded perspective.
                     </p>
-                    <p class="text-xl font-semibold mt-6 accent-text text-center md:text-left">And now, our forever begins.</p>
+                    <p class="text-lg mb-4">
+                        With the full support and happiness of our elders, our connection deepened from acquaintance to genuine affection, culminating in the joyous decision to unite our lives and families forever.
+                    </p>
+                    <p class="text-xl font-semibold mt-6 accent-text text-center md:text-left">With the blessings of our families, our journey begins.</p>
                 </div>
                 <div class="order-1 md:order-2">
                     <img 
@@ -307,8 +319,10 @@
 
         <!-- Divider --><hr class="accent-border my-20 opacity-30">
 
-        <!-- 6. Blessings Wall Section --><section id="blessings-wall" class="fade-in text-center pb-20">
+        <!-- 6. Blessings Wall Section (Updated to include display list and admin tools) --><section id="blessings-wall" class="fade-in text-center pb-20">
             <h2 class="text-5xl font-decorative accent-text mb-12">Leave a Blessing</h2>
+            
+            <!-- Form Container (max-w-md) -->
             <div class="max-w-md mx-auto blessings-wall-bg p-8 rounded-xl shadow-2xl border accent-border border-opacity-20">
                 <p class="text-lg text-gray-600 mb-6">
                     Share your heartfelt wishes for Pooja and Jatin!
@@ -354,6 +368,25 @@
                     </button>
                 </form>
             </div>
+
+            <!-- Blessings Display Area (max-w-3xl for wider text cards) -->
+            <div class="max-w-3xl mx-auto mt-20">
+                <h3 class="text-4xl font-decorative accent-text text-center mb-10">Guests' Kind Words</h3>
+                
+                <!-- Admin Tools Display - Visible only to adminUserId -->
+                <div id="admin-tools-display" class="hidden mb-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-md text-sm text-left">
+                    <p class="font-bold">✨ Admin Tools Active</p>
+                    <p>You can see Pin/Hide/Delete buttons on each blessing card below.</p>
+                </div>
+
+                <div id="blessingsList" class="space-y-6 text-left px-4 sm:px-0">
+                    <div id="blessings-loading" class="text-center text-gray-500 p-8">
+                        <span class="animate-spin mr-2 inline-block">⟳</span> Loading blessings...
+                    </div>
+                    <!-- Blessings will be rendered here -->
+                </div>
+            </div>
+
         </section>
 
     </main>
@@ -369,14 +402,15 @@
     <!-- JavaScript for Countdown, Animations, and Firebase --><script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, query, where, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, query, where, getDocs, onSnapshot, setLogLevel, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Global Variables for Firebase Setup
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        let db;
-        let auth;
-        let userId = null; // User ID from Firebase Auth
+        let app, db, auth;
+        let userId = null; // Current authenticated user ID
+        let adminUserId = null; // The User ID used to load the app initially (assumed owner)
+        let isAuthReady = false; // Flag to ensure actions wait for auth
 
         // Gemini API Configuration
         const MAX_RETRIES = 3;
@@ -393,10 +427,10 @@
                 // Log for debugging Firebase operations
                 setLogLevel('Debug');
 
-                const app = initializeApp(firebaseConfig);
+                app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-
+                
                 // Authentication setup: handles custom token if available, otherwise signs in anonymously
                 onAuthStateChanged(auth, async (user) => {
                     if (!user) {
@@ -411,11 +445,26 @@
                             showMessage("Authentication failed. Blessing Wall feature may not work.", 'error');
                         }
                     }
-                    // Once authenticated, set userId
+                    
+                    // Once authenticated (or anonymously signed in), set flag and user ID
                     userId = auth.currentUser?.uid || (typeof crypto !== 'undefined' ? crypto.randomUUID() : 'guest');
+                    
+                    // Set the current user as the admin if it's the first time identifying the user
+                    if (!adminUserId) {
+                        adminUserId = userId;
+                        if (document.getElementById('admin-tools-display') && adminUserId === userId) {
+                             document.getElementById('admin-tools-display').classList.remove('hidden');
+                        }
+                    }
+                    
+                    isAuthReady = true;
                     console.log("Authenticated User ID:", userId);
-                    document.getElementById('user-id-display').textContent = `User ID: ${userId}`;
+                    document.getElementById('user-id-display').textContent = `User ID: ${userId} | Admin ID: ${adminUserId}`;
+                    
+                    // CRITICAL: Start fetching real-time data ONLY after successful authentication
+                    fetchBlessingsRealtime(); 
                 });
+
             } catch (e) {
                 console.error("Firebase initialization failed:", e);
                 showMessage("Database connection failed. Blessing Wall feature is unavailable.", 'error');
@@ -445,6 +494,206 @@
                 messageBox.classList.add('hidden');
             }, 5000);
         }
+        
+        /**
+         * Helper function to determine if the current user is the admin.
+         */
+        function isAdmin() {
+            return userId === adminUserId;
+        }
+
+        /**
+         * Renders the list of blessings to the UI.
+         * @param {Array<Object>} blessings - Array of blessing objects.
+         */
+        function renderBlessings(blessings) {
+            const listContainer = document.getElementById('blessingsList');
+            
+            // Clear previous content
+            listContainer.innerHTML = '';
+            
+            // 1. Filter blessings for display (Only visible ones for guests, all for admin)
+            const blessingsToDisplay = isAdmin() ? blessings : blessings.filter(b => b.status !== 'hidden');
+
+            if (blessingsToDisplay.length === 0) {
+                listContainer.insertAdjacentHTML('beforeend', `
+                    <p class="text-center text-gray-500 p-8 bg-white rounded-xl shadow-lg border border-gray-100 blessing-item">
+                        Be the first to share your blessing for Pooja and Jatin!
+                    </p>
+                `);
+                return;
+            }
+
+            // 2. Sorting Logic: Pinned first, then by timestamp descending
+            blessingsToDisplay.sort((a, b) => {
+                // Pinned blessings come first
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+
+                // Then sort by timestamp descending (newest first)
+                const timeA = a.timestamp && a.timestamp.toDate ? a.timestamp.toDate().getTime() : 0;
+                const timeB = b.timestamp && b.timestamp.toDate ? b.timestamp.toDate().getTime() : 0;
+                return timeB - timeA;
+            });
+
+            // 3. Render
+            blessingsToDisplay.forEach(blessing => {
+                const docId = blessing.id; // Firestore document ID is now available
+                
+                // Ensure timestamp conversion is safe
+                let date = 'N/A';
+                if (blessing.timestamp && blessing.timestamp.toDate) {
+                    date = blessing.timestamp.toDate().toLocaleDateString('en-US', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+                }
+                
+                let adminButtons = '';
+                // Define isHidden and isPinned within the scope of the forEach loop
+                const isHidden = blessing.status === 'hidden';
+                const isPinned = blessing.pinned === true;
+
+                if (isAdmin()) {
+                    adminButtons = `
+                        <div class="mt-4 pt-3 border-t border-gray-100 flex justify-end space-x-2">
+                            <button onclick="window.pinBlessing('${docId}', ${!isPinned})" 
+                                    class="text-xs p-1 rounded-full flex items-center transition duration-150 ${isPinned ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}">
+                                ${isPinned ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 011 1v2.243l3.03 3.03a1 1 0 01-1.414 1.414L12 7.414V14l-1 1v2H9v-2l-1-1V7.414L5.384 11.087a1 1 0 11-1.414-1.414l3.03-3.03V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586A4 4 0 0012 5.586v4.414a2 2 0 104 0V5.586a4 4 0 00-6.828-2.828L5.586 7M4 12h.01M16 12h.01M8 16h.01" /></svg>'}
+                                ${isPinned ? 'Unpin' : 'Pin'}
+                            </button>
+                            <button onclick="window.updateBlessingStatus('${docId}', '${isHidden ? 'visible' : 'hidden'}')" 
+                                    class="text-xs p-1 rounded-full flex items-center transition duration-150 ${isHidden ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}">
+                                ${isHidden ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.065-7 9.542-7 1.63 0 3.194.398 4.542 1.157m-.001 10.386C16.804 15.228 12 17 12 17s-4.804-1.772-7.82-5.914A9.99 9.99 0 0112 5c2.203 0 4.264.793 5.86 2.158M3 3l18 18" /></svg>'}
+                                ${isHidden ? 'Show' : 'Hide'}
+                            </button>
+                            <button onclick="window.deleteBlessing('${docId}')" 
+                                    class="text-xs p-1 rounded-full flex items-center bg-red-50 text-red-500 hover:bg-red-100 transition duration-150">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                }
+
+                const pinIcon = isPinned ? `<span class="blessing-pin text-xl text-red-500" title="Pinned by Admin">📌</span>` : '';
+                const statusClass = isAdmin() && isHidden ? 'opacity-60 border-dashed border-red-300' : 'border-gray-100';
+
+
+                const blessingHTML = `
+                    <div class="p-6 bg-white rounded-xl shadow-lg border ${statusClass} blessing-item transform transition duration-300 hover:shadow-xl hover:scale-[1.005]">
+                        ${pinIcon}
+                        <p class="text-xl font-decorative accent-text mb-3 leading-snug text-center ${isAdmin() && isHidden ? 'line-through' : ''}">
+                            "${blessing.blessing}"
+                        </p>
+                        <p class="text-right text-sm font-semibold text-gray-700 mt-4">
+                            — ${blessing.guestName}
+                        </p>
+                        <p class="text-right text-xs text-gray-400 mt-1">
+                            ${date}
+                        </p>
+                        ${adminButtons}
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', blessingHTML);
+            });
+        }
+        
+        // --- Admin Functions ---
+
+        window.updateBlessingStatus = async function(docId, newStatus) {
+            if (!isAdmin() || !docId) return showMessage("Access denied.", 'error');
+
+            const blessingRef = doc(db, `artifacts/${appId}/public/data/blessings`, docId);
+            try {
+                await updateDoc(blessingRef, {
+                    status: newStatus,
+                    // If hiding, unpin it automatically
+                    pinned: newStatus === 'hidden' ? false : (newStatus === 'visible' ? false : undefined) // only set if explicitly changing status
+                });
+                showMessage(`Blessing successfully ${newStatus === 'hidden' ? 'hidden' : 'made visible'}.`, 'success');
+            } catch (e) {
+                console.error("Error updating status: ", e);
+                showMessage("Error updating blessing status. Check permissions.", 'error');
+            }
+        };
+
+        window.pinBlessing = async function(docId, pinState) {
+            if (!isAdmin() || !docId) return showMessage("Access denied.", 'error');
+
+            const blessingRef = doc(db, `artifacts/${appId}/public/data/blessings`, docId);
+            try {
+                await updateDoc(blessingRef, {
+                    pinned: pinState,
+                    // Pinning implicitly makes it visible
+                    status: pinState ? 'visible' : 'visible' 
+                });
+                showMessage(`Blessing successfully ${pinState ? 'pinned' : 'unpinned'}.`, 'success');
+            } catch (e) {
+                console.error("Error pinning blessing: ", e);
+                showMessage("Error pinning blessing. Check permissions.", 'error');
+            }
+        };
+
+        window.deleteBlessing = async function(docId) {
+             if (!isAdmin() || !docId) return showMessage("Access denied.", 'error');
+
+            const confirmed = true; // Replace with a custom confirmation modal if needed
+
+            if (confirmed) {
+                const blessingRef = doc(db, `artifacts/${appId}/public/data/blessings`, docId);
+                try {
+                    await deleteDoc(blessingRef);
+                    showMessage("Blessing successfully deleted.", 'success');
+                } catch (e) {
+                    console.error("Error deleting blessing: ", e);
+                    showMessage("Error deleting blessing. Check permissions.", 'error');
+                }
+            }
+        };
+
+        // --- Data Fetching Logic ---
+
+        /**
+         * Fetches blessings in real-time using onSnapshot.
+         */
+        function fetchBlessingsRealtime() {
+            // Check if both database is initialized and authentication is ready
+            if (!db || !isAuthReady) {
+                console.log("Waiting for Firebase initialization and authentication before fetching blessings.");
+                return;
+            }
+            
+            try {
+                const blessingsCollectionRef = collection(db, `artifacts/${appId}/public/data/blessings`);
+                
+                // Use onSnapshot for real-time updates
+                onSnapshot(blessingsCollectionRef, (snapshot) => {
+                    const blessings = [];
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        // Add Firestore document ID to the data object
+                        data.id = doc.id;
+                        
+                        // Set default status/pinned if missing
+                        if (!data.status) data.status = 'visible';
+                        if (typeof data.pinned === 'undefined') data.pinned = false;
+
+                        // Filter for valid blessing documents (must have name, blessing, and timestamp)
+                        if (data.guestName && data.blessing && data.timestamp) {
+                             blessings.push(data);
+                        }
+                    });
+                    renderBlessings(blessings);
+                }, (error) => {
+                    console.error("Error listening to blessings collection: ", error);
+                    const listContainer = document.getElementById('blessingsList');
+                    listContainer.innerHTML = `<p class="text-center text-red-500 mt-12 p-8">Failed to load blessings due to permission error.</p>`;
+                });
+            } catch (e) {
+                 console.error("Error setting up blessings listener: ", e);
+            }
+        }
+
 
         /**
          * Handles form submission and saves/updates blessing data to Firestore.
@@ -452,8 +701,8 @@
         async function submitBlessing(event) {
             event.preventDefault();
 
-            if (!db) {
-                showMessage("Database not initialized. Please try reloading.", 'error');
+            if (!db || !isAuthReady) {
+                showMessage("Authentication in progress. Please wait a moment and try again.", 'error');
                 return;
             }
 
@@ -472,7 +721,9 @@
                 email: email,
                 blessing: message,
                 timestamp: new Date(),
-                userId: userId, // Keep this for tracking if needed
+                userId: userId, 
+                status: 'visible', // New blessings are visible by default
+                pinned: false,    // New blessings are not pinned by default
             };
 
             try {
@@ -483,6 +734,11 @@
                 if (!querySnapshot.empty) {
                     // Update existing blessing
                     const docId = querySnapshot.docs[0].id;
+                    // Preserve existing status/pinned fields if they are present, otherwise use defaults in `data`
+                    const existingData = querySnapshot.docs[0].data();
+                    data.status = existingData.status || data.status;
+                    data.pinned = existingData.pinned || data.pinned;
+
                     await setDoc(doc(db, `artifacts/${appId}/public/data/blessings`, docId), data);
                     showMessage("Thank you! Your blessing has been updated.", 'success');
                 } else {
@@ -674,6 +930,11 @@
             if (generateBtn) {
                 generateBtn.addEventListener('click', generateMessage);
             }
+            
+            // 6. Make Admin functions globally accessible (for button onclicks)
+            window.updateBlessingStatus = updateBlessingStatus;
+            window.pinBlessing = pinBlessing;
+            window.deleteBlessing = deleteBlessing;
         };
 
     </script>
