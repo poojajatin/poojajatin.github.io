@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pooja & Jatin | Wedding</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts: Inter for body, Dancing Script for decorative headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom font utilities for Tailwind */
+        .font-primary { font-family: 'Inter', sans-serif; }
+        .font-decorative { font-family: 'Dancing Script', cursive; }
+        
+        /* Custom scroll-padding for sticky header */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 6rem; /* Space for the fixed header */
+        }
+        
+        /* Custom accent color (Deep Rose Gold/Maroon) */
+        .accent-text { color: #8A3324; }
+        .accent-bg { background-color: #8A3324; }
+        .accent-border { border-color: #8A3324; }
+        
+        /* Fade-in animation for sections */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero section background */
+        .hero-bg {
+            /* Using a more vibrant placeholder for better visual appeal */
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('https://placehold.co/1920x1080/635147/FFFFFF/webp?text=Pooja+%26+Jatin');
+            background-size: cover;
+            background-position: center;
+            height: 80vh; /* Adjust height for a better mobile view */
+        }
+        
+        /* Custom animation for loading spinner */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin { animation: spin 1s linear infinite; }
+    </style>
+</head>
+
+<body class="font-primary bg-gray-50 text-gray-800">
+
+    <!-- Sticky Navigation Header -->
+    <header class="fixed top-0 left-0 w-full bg-white bg-opacity-95 shadow-md z-50 transition-all duration-300" id="nav-header">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <a href="#hero" class="text-3xl font-decorative accent-text transition-colors duration-300 hover:text-red-700">P & J</a>
+            <div class="space-x-4 text-sm hidden sm:flex">
+                <a href="#couple" class="hover:accent-text transition-colors duration-200">Our Story</a>
+                <a href="#events" class="hover:accent-text transition-colors duration-200">The Events</a>
+                <a href="#gallery" class="hover:accent-text transition-colors duration-200">Gallery</a>
+                <a href="#gifts" class="hover:accent-text transition-colors duration-200">Gifts</a>
+                <a href="#rsvp" class="hover:accent-text transition-colors duration-200">RSVP</a>
+            </div>
+            <button class="sm:hidden text-gray-600 hover:accent-text" onclick="toggleMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden sm:hidden px-4 pb-2 space-y-2 text-center text-lg bg-white">
+            <a href="#couple" onclick="toggleMenu()" class="block py-1 hover:accent-text transition-colors duration-200">Our Story</a>
+            <a href="#events" onclick="toggleMenu()" class="block py-1 hover:accent-text transition-colors duration-200">The Events</a>
+            <a href="#gallery" onclick="toggleMenu()" class="block py-1 hover:accent-text transition-colors duration-200">Gallery</a>
+            <a href="#gifts" onclick="toggleMenu()" class="block py-1 hover:accent-text transition-colors duration-200">Gifts</a>
+            <a href="#rsvp" onclick="toggleMenu()" class="block py-1 hover:accent-text transition-colors duration-200">RSVP</a>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section id="hero" class="hero-bg flex flex-col items-center justify-center text-white text-center pt-24">
+        <div class="p-6 md:p-10 bg-black bg-opacity-30 rounded-xl shadow-2xl backdrop-blur-sm">
+            <p class="text-lg md:text-xl mb-2 tracking-widest uppercase">We're getting married!</p>
+            <h1 class="text-7xl md:text-9xl font-decorative mb-6 leading-tight">Pooja <span class="text-4xl mx-2">&</span> Jatin</h1>
+            <p class="text-2xl md:text-3xl font-semibold mb-8">10. December. 2025 | Mumbai</p>
+            
+            <!-- Countdown Timer -->
+            <div id="countdown" class="flex justify-center space-x-4 md:space-x-8 text-white">
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                    <span id="days" class="text-4xl md:text-5xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Days</span>
+                </div>
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                    <span id="hours" class="text-4xl md:text-5xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Hours</span>
+                </div>
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                    <span id="minutes" class="text-4xl md:text-5xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Mins</span>
+                </div>
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                    <span id="seconds" class="text-4xl md:text-5xl font-bold">00</span>
+                    <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Secs</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Wrapper -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+
+        <!-- 2. The Couple / Our Story Section -->
+        <section id="couple" class="fade-in">
+            <h2 class="text-5xl font-decorative text-center accent-text mb-12">Our Story</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <p class="text-lg mb-4">
+                        Our journey began not with a spark, but a comfortable warmth. Pooja, with her infectious laugh and boundless energy, first met Jatin, the calm and steady force, through mutual friends at a small gathering in Delhi. What started as casual conversations quickly evolved into late-night talks, sharing dreams, and exploring the city together.
+                    </p>
+                    <p class="text-lg mb-4">
+                        From navigating the bustling streets of Chandni Chowk to quiet evenings discussing classic cinema, we found our lives harmonizing perfectly. Jatin loved how Pooja saw color in everything; Pooja admired Jatin's grounded wisdom. Four years later, under a sky full of stars, Jatin asked the question that set us on our path to forever.
+                    </p>
+                    <p class="text-xl font-semibold mt-6 accent-text text-center md:text-left">And now, our forever begins.</p>
+                </div>
+                <div class="order-1 md:order-2">
+                    <img 
+                        src="https://placehold.co/800x600/DDA0DD/FFFFFF?text=The+Happy+Couple" 
+                        onerror="this.onerror=null;this.src='https://placehold.co/800x600/DDA0DD/FFFFFF?text=The+Happy+Couple';"
+                        alt="Pooja and Jatin smiling together" 
+                        class="w-full h-auto rounded-xl shadow-lg transform hover:scale-[1.02] transition duration-500 ease-in-out object-cover aspect-[4/3]"
+                    >
+                </div>
+            </div>
+        </section>
+        
+        <!-- Divider -->
+        <hr class="accent-border my-16 opacity-30">
+
+        <!-- 3. Event Details Section (Completed and Detailed) -->
+        <section id="events" class="fade-in text-center">
+            <h2 class="text-5xl font-decorative accent-text mb-12">Celebrations</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Event 1: Haldi & Mehendi (09 Dec) -->
+                <div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
+                    <div>
+                        <div class="text-4xl accent-text mb-4 mx-auto">
+                            <!-- Placeholder Icon for Mehendi -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-decorative accent-text mb-2">Haldi & Mehendi</h3>
+                        <p class="text-sm text-gray-500 mb-4">Tuesday, 09 December 2025</p>
+                        <p class="text-base text-gray-600 mb-2">**Time:** 11:00 AM onwards</p>
+                        <p class="text-base font-medium">The Grand Ballroom, Oberoi Towers</p>
+                        <p class="text-sm text-gray-500 italic mt-4">
+                            A morning of joyous rituals, vibrant colors, and beautiful henna patterns! Dress code: Bright, festive traditional wear (yellow/green accents encouraged).
+                        </p>
+                    </div>
+                    <a href="https://maps.app.goo.gl/YourMapLinkHere" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
+                        Get Directions
+                    </a>
+                </div>
+
+                <!-- Event 2: Wedding Ceremony (10 Dec) -->
+                <div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 transform scale-[1.05] shadow-2xl z-10 flex flex-col justify-between">
+                    <div>
+                        <div class="text-4xl accent-text mb-4 mx-auto">
+                            <!-- Placeholder Icon for Wedding Mandap -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-decorative accent-text mb-2 font-bold">The Wedding</h3>
+                        <p class="text-lg font-semibold accent-text mb-4">Wednesday, 10 December 2025</p>
+                        <p class="text-base text-gray-600 mb-2">**Muhurat:** 4:30 PM</p>
+                        <p class="text-base font-medium">The Sea View Lawn, Taj Land's End</p>
+                        <p class="text-sm text-gray-500 italic mt-4">
+                            Witness the joining of two souls in a traditional Hindu ceremony followed by dinner. Dress code: Formal Indian attire.
+                        </p>
+                    </div>
+                    <a href="https://maps.app.goo.gl/YourMapLinkHere" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
+                        View Location
+                    </a>
+                </div>
+
+                <!-- Event 3: Reception (10 Dec Evening) -->
+                <div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
+                    <div>
+                        <div class="text-4xl accent-text mb-4 mx-auto">
+                            <!-- Placeholder Icon for Party/Toast -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2zM4 14v-2c0-.552.448-1 1-1h14c.552 0 1 .448 1 1v2c0 .552-.448 1-1 1H5c-.552 0-1-.448-1-1z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-decorative accent-text mb-2">Reception</h3>
+                        <p class="text-sm text-gray-500 mb-4">Wednesday, 10 December 2025</p>
+                        <p class="text-base text-gray-600 mb-2">**Time:** 7:30 PM onwards</p>
+                        <p class="text-base font-medium">The Sea View Lawn, Taj Land's End</p>
+                        <p class="text-sm text-gray-500 italic mt-4">
+                            Join us for an evening of music, dancing, and cocktails to celebrate! Dress code: Western Formals or Cocktail Attire.
+                        </p>
+                    </div>
+                    <a href="https://maps.app.goo.gl/YourMapLinkHere" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
+                        View Location
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <hr class="accent-border my-20 opacity-30">
+
+        <!-- 4. Gallery Section -->
+        <section id="gallery" class="fade-in">
+            <h2 class="text-5xl font-decorative accent-text text-center mb-12">Moments</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+1" alt="Placeholder Wedding Photo 1" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+2" alt="Placeholder Wedding Photo 2" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+3" alt="Placeholder Wedding Photo 3" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+4" alt="Placeholder Wedding Photo 4" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+5" alt="Placeholder Wedding Photo 5" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+6" alt="Placeholder Wedding Photo 6" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+7" alt="Placeholder Wedding Photo 7" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+8" alt="Placeholder Wedding Photo 8" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <hr class="accent-border my-20 opacity-30">
+
+        <!-- 5. Gifts and Registry Section -->
+        <section id="gifts" class="fade-in text-center py-8">
+            <h2 class="text-5xl font-decorative accent-text mb-8">Gifts & Blessings</h2>
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-xl border accent-border border-opacity-20">
+                <p class="text-lg text-gray-700 mb-6">
+                    Your presence at our wedding is the only gift we truly desire. However, if you would like to bless us with a token of your love, we would be incredibly grateful.
+                </p>
+                <div class="space-y-4">
+                    <p class="text-xl font-semibold accent-text">A Contribution to Our Future</p>
+                    <p class="text-md text-gray-600">
+                        We have chosen to forgo a traditional registry. A monetary gift towards our new life together and honeymoon fund would be deeply appreciated.
+                    </p>
+                    <button class="accent-bg text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
+                        <a href="#rsvp">RSVP First</a>
+                    </button>
+                    <p class="text-sm text-gray-500 pt-4">No boxes, please. Just your beautiful wishes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <hr class="accent-border my-20 opacity-30">
+
+        <!-- 6. RSVP Section (Updated with AI Feature) -->
+        <section id="rsvp" class="fade-in text-center pb-20">
+            <h2 class="text-5xl font-decorative accent-text mb-12">Kindly RSVP</h2>
+            <div class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-2xl border accent-border border-opacity-20">
+                <p class="text-lg text-gray-600 mb-6">
+                    Please let us know your attendance status by November 15, 2025.
+                </p>
+
+                <!-- Message Box for custom alerts/success -->
+                <div id="message-box" class="hidden text-sm mb-4"></div>
+
+                <form id="rsvpForm">
+                    <!-- Guest Name -->
+                    <div class="mb-6 text-left">
+                        <label for="guestName" class="block text-sm font-medium text-gray-700 mb-2">Your Full Name (Required)</label>
+                        <input type="text" id="guestName" name="guestName" required
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-accent-bg focus:border-accent-bg transition duration-150">
+                    </div>
+
+                    <!-- Attendance Status -->
+                    <div class="mb-6 text-left">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Will you be attending?</label>
+                        <div class="flex items-center space-x-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="attending" value="yes" required class="form-radio h-4 w-4 text-pink-600 border-gray-300 focus:ring-accent-bg">
+                                <span class="ml-2 text-gray-700">Joyfully Accepts</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="attending" value="no" required class="form-radio h-4 w-4 text-pink-600 border-gray-300 focus:ring-accent-bg">
+                                <span class="ml-2 text-gray-700">Regretfully Declines</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Additional Guests -->
+                    <div class="mb-6 text-left">
+                        <label for="guests" class="block text-sm font-medium text-gray-700 mb-2">Number of Additional Guests (Total Party Size: 1 + Guests)</label>
+                        <input type="number" id="guests" name="guests" value="0" min="0" max="5"
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-accent-bg focus:border-accent-bg transition duration-150">
+                    </div>
+
+                    <!-- Message + AI Generator -->
+                    <div class="mb-6 text-left">
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-2">A special message for Pooja & Jatin (Optional)</label>
+                        <textarea id="message" name="message" rows="3"
+                                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-accent-bg focus:border-accent-bg transition duration-150"></textarea>
+                        
+                        <!-- AI Feature Button and Loading Indicator -->
+                        <div class="mt-2 flex justify-end">
+                            <button type="button" id="generate-message-btn" class="flex items-center text-sm px-3 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition duration-150">
+                                ✨ Generate a Blessing
+                            </button>
+                        </div>
+                        <div id="loading-indicator" class="hidden text-xs text-gray-500 mt-2 text-right">
+                            <span class="animate-spin mr-1 inline-block">⟳</span> Generating thoughtful message...
+                        </div>
+                    </div>
+
+                    <button type="submit" id="rsvp-submit"
+                            class="accent-bg text-white font-bold py-3 px-8 rounded-full w-full shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-[1.01]">
+                        Submit RSVP
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="accent-bg text-white py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-3xl font-decorative mb-2">With Love,</p>
+            <p class="text-xl font-semibold mb-4">Pooja & Jatin</p>
+            <p class="text-sm opacity-80">We look forward to celebrating with you.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Countdown, Animations, and Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Variables for Firebase Setup
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        let db;
+        let auth;
+        let userId = null;
+
+        // Gemini API Configuration
+        const MAX_RETRIES = 3;
+        const API_KEY = ""; // Placeholder for Canvas environment injection
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=";
+
+
+        /**
+         * Initializes Firebase and authenticates the user (or signs in anonymously).
+         * Sets up Firestore and Auth instances.
+         */
+        async function initFirebase() {
+            try {
+                // Log for debugging Firebase operations
+                setLogLevel('Debug');
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Authentication setup: handles custom token if available, otherwise signs in anonymously
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                        try {
+                            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                                await signInWithCustomToken(auth, __initial_auth_token);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Firebase auth failed during sign-in:", error);
+                            showMessage("Authentication failed. RSVP feature may not work.", 'error');
+                        }
+                    }
+                    // Once authenticated, set userId
+                    userId = auth.currentUser?.uid || (typeof crypto !== 'undefined' ? crypto.randomUUID() : 'guest');
+                    console.log("Authenticated User ID:", userId);
+                    document.getElementById('user-id-display').textContent = `User ID: ${userId}`;
+                });
+            } catch (e) {
+                console.error("Firebase initialization failed:", e);
+                showMessage("Database connection failed. RSVP feature is unavailable.", 'error');
+            }
+        }
+        
+        /**
+         * Custom message handler (replaces alert()).
+         * @param {string} message - The message to display.
+         * @param {string} type - The type of message ('success', 'error', 'info').
+         */
+        function showMessage(message, type = 'info') {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = message;
+            messageBox.className = 'message-box p-3 rounded-lg mt-4 text-center';
+            
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+            } else {
+                messageBox.classList.add('bg-blue-100', 'text-blue-800');
+            }
+
+            messageBox.classList.remove('hidden');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        /**
+         * Handles form submission and saves RSVP data to Firestore.
+         */
+        async function submitRsvp(event) {
+            event.preventDefault();
+
+            if (!db) {
+                showMessage("Database not initialized. Please try reloading.", 'error');
+                return;
+            }
+
+            const form = event.target;
+            const submitButton = document.getElementById('rsvp-submit');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+
+            const formData = new FormData(form);
+            const data = {
+                guestName: formData.get('guestName'),
+                attending: formData.get('attending') === 'yes',
+                guests: parseInt(formData.get('guests')) || 0,
+                message: formData.get('message'),
+                timestamp: new Date(),
+                userId: userId,
+            };
+
+            try {
+                // Path: /artifacts/{appId}/public/data/rsvps
+                const rsvpCollectionRef = collection(db, `artifacts/${appId}/public/data/rsvps`);
+                await addDoc(rsvpCollectionRef, data);
+                
+                showMessage("Thank you! Your RSVP has been recorded.", 'success');
+                form.reset();
+            } catch (e) {
+                console.error("Error adding RSVP document: ", e);
+                showMessage("Error submitting RSVP. Please try again.", 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit RSVP';
+            }
+        }
+
+        // --- Gemini API Logic ---
+
+        /**
+         * Handles the retry logic with exponential backoff for fetch calls.
+         */
+        async function fetchWithRetry(url, options, retries = MAX_RETRIES) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return response;
+                    } else if (response.status === 429 && i < retries - 1) { // Too Many Requests
+                        const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    } else {
+                        throw new Error(`API request failed with status: ${response.status}`);
+                    }
+                } catch (error) {
+                    if (i === retries - 1) {
+                        throw error;
+                    }
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            throw new Error("API request failed after all retries.");
+        }
+
+
+        /**
+         * Generates a special wedding blessing message using the Gemini API.
+         */
+        async function generateMessage() {
+            const btn = document.getElementById('generate-message-btn');
+            const loading = document.getElementById('loading-indicator');
+            const messageTextarea = document.getElementById('message');
+
+            // Show loading state
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin mr-1 inline-block">⟳</span> Generating...';
+            loading.classList.remove('hidden');
+
+            const systemPrompt = "You are a thoughtful wedding guest. Write a very short (max 2 sentences) and warm congratulatory message or blessing for a couple named Pooja and Jatin who are getting married.";
+            const userQuery = "Write a short, heartfelt wedding message for Pooja and Jatin.";
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            try {
+                const response = await fetchWithRetry(API_URL + API_KEY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (generatedText) {
+                    // Capitalize the first letter and trim whitespace
+                    const finalMessage = generatedText.trim().charAt(0).toUpperCase() + generatedText.trim().slice(1);
+                    messageTextarea.value = finalMessage;
+                    showMessage("Message generated! Feel free to edit it.", 'info');
+                } else {
+                    showMessage("Could not generate message. Please try again.", 'error');
+                    console.error("API response content missing:", result);
+                }
+            } catch (e) {
+                console.error("Gemini API call error:", e);
+                showMessage("Failed to connect to the AI message generator. Try writing your own!", 'error');
+            } finally {
+                // Hide loading state
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                loading.classList.add('hidden');
+            }
+        }
+
+
+        // --- Standard JS Functions ---
+
+        /**
+         * Calculates and updates the countdown timer.
+         */
+        function updateCountdown() {
+            const countdownDate = new Date("Dec 10, 2025 16:30:00").getTime();
+            
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result
+            if (document.getElementById("days")) {
+                document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+                document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+            }
+
+            // If the countdown is over, write some text 
+            if (distance < 0) {
+                clearInterval(window.countdownInterval);
+                const countdownDiv = document.getElementById("countdown");
+                if (countdownDiv) {
+                    countdownDiv.innerHTML = '<span class="text-4xl font-decorative text-yellow-300">We are married!</span>';
+                }
+            }
+        }
+        
+        /**
+         * Toggles the mobile navigation menu visibility.
+         */
+        window.toggleMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        };
+
+        /**
+         * Sets up the Intersection Observer for fade-in animations.
+         */
+        function setupIntersectionObserver() {
+            const sections = document.querySelectorAll('.fade-in');
+            
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // trigger when 10% of element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('appear');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+
+        // Window Load Handler
+        window.onload = function() {
+            // 1. Start Firebase Initialization
+            initFirebase();
+
+            // 2. Setup Countdown
+            updateCountdown();
+            window.countdownInterval = setInterval(updateCountdown, 1000);
+
+            // 3. Setup Fade-in Animations
+            setupIntersectionObserver();
+
+            // 4. Attach RSVP Form Submission Listener
+            const rsvpForm = document.getElementById('rsvpForm');
+            if (rsvpForm) {
+                rsvpForm.addEventListener('submit', submitRsvp);
+            }
+
+            // 5. Attach AI Message Generator Listener
+            const generateBtn = document.getElementById('generate-message-btn');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', generateMessage);
+            }
+        };
+
+    </script>
+    
+    <!-- Display User ID for debugging/reference as required -->
+    <div id="user-id-display" class="fixed bottom-2 right-2 text-xs text-gray-400">Initializing...</div>
+
+</body>
+</html>
