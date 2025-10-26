@@ -17,11 +17,18 @@
             scroll-padding-top: 6rem; /* Space for the fixed header */
         }
         
-        /* --- NEW COLOR SCHEME: CRIMSON RED & GOLD --- */
-        /* Primary Accent Color: Rich Crimson (Traditional Shubh Laal) */
-        .accent-text { color: #991B1B; } 
-        .accent-bg { background-color: #991B1B; }
-        .accent-border { border-color: #991B1B; }
+        /* --- REFINED COLOR SCHEME: DUSTY ROSE & MUTED GOLD --- */
+        
+        /* Primary Accent Color: Muted Rose/Rose Gold (for text and icons) */
+        .accent-text { color: #855858; } 
+        .accent-bg { background-color: #855858; }
+        .accent-border { border-color: #855858; }
+        
+        /* Soft Cream Background for the body */
+        body {
+            background-color: #FFFAF7; 
+            color: #333333; /* Darker text for contrast */
+        }
         
         /* Fade-in animation for sections */
         .fade-in {
@@ -34,10 +41,10 @@
             transform: translateY(0);
         }
 
-        /* Hero section background reflecting rich Indian wedding tones */
+        /* Hero section background reflecting rich Indian wedding tones with softer filter */
         .hero-bg {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
-                        url('https://placehold.co/1920x1080/4A1700/FFD700/webp?text=North+Indian+Wedding');
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('https://placehold.co/1920x1080/4A1700/D4AF37/webp?text=Pooja+%26+Jatin'); /* Gold text on dark base */
             background-size: cover;
             background-position: center;
             height: 80vh; /* Adjust height for a better mobile view */
@@ -50,9 +57,9 @@
         }
         .animate-spin { animation: spin 1s linear infinite; }
 
-        /* Custom gradient button (Gold to Crimson) */
+        /* Custom gradient button (Soft Gold to Muted Rose) */
         .gradient-button {
-            background-image: linear-gradient(to right, #FBBF24, #991B1B); /* Gold to Crimson */
+            background-image: linear-gradient(to right, #D4AF37, #855858); /* Muted Gold to Muted Rose */
             color: white;
             font-weight: bold;
             padding: 0.75rem 2rem;
@@ -72,35 +79,36 @@
             box-shadow: none;
         }
 
-        /* Custom input/textarea styling (Kept light gold/yellow, which pairs well) */
+        /* Custom input/textarea styling (Kept light and clean) */
         .form-input-custom {
-            background-color: #FEF3C7; /* Light yellow background */
-            border-color: #FCD34D; /* Yellow border */
+            background-color: #FDFCFB; 
+            border-color: #E5E7EB; 
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
         }
         .form-input-custom:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.5); /* Yellow focus ring */
-            border-color: #FBBF24; /* Darker yellow border on focus */
+            box-shadow: 0 0 0 2px rgba(133, 88, 88, 0.5); /* Muted Rose focus ring */
+            border-color: #855858; 
         }
 
-        /* Custom section background for the blessings wall */
+        /* Custom section background for the blessings wall - subtle pattern like the inspo site */
         .blessings-wall-bg {
-            background-color: #FDFCEF; /* Very light gold/cream */
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FADFAD' fill-opacity='0.6'%3E%3Cpath d='M0 40L40 0H20L0 20V40ZM40 40V20L20 40H40Z'/%3E%3C/g%3E%3C/svg%3E");
+            background-color: #FDFCFB; /* Very light cream */
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37' fill-opacity='0.2'%3E%3Cpath d='M0 40L40 0H20L0 20V40ZM40 40V20L20 40H40Z'/%3E%3C/g%3E%3C/svg%3E");
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); /* Soft shadow */
         }
 
         /* Styles for the "A Note for You" section */
         .note-heading-gradient {
-            background-image: linear-gradient(to right, #FBBF24, #991B1B); /* Gold to Crimson */
+            background-image: linear-gradient(to right, #D4AF37, #855858); /* Muted Gold to Muted Rose */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             color: transparent; /* Fallback */
         }
         .note-section-bg {
-            background-color: #FFFBEB; /* Lightest gold/cream background */
+            background-color: #FFF9F7; /* Very light pinkish cream background */
         }
         
         .blessing-item {
@@ -111,14 +119,20 @@
             top: 0.75rem;
             left: 0.75rem;
         }
+
+        /* General card styling update for softer look */
+        .card {
+            border: 1px solid #F3E5E5; /* Light rose border */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 
-<body class="font-primary bg-gray-50 text-gray-800">
+<body class="font-primary bg-[#FFFAF7] text-[#333333]">
 
     <!-- Sticky Navigation Header --><header class="fixed top-0 left-0 w-full bg-white bg-opacity-95 shadow-md z-50 transition-all duration-300" id="nav-header">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-            <a href="#hero" class="text-3xl font-decorative accent-text transition-colors duration-300 hover:text-red-700">P & J</a>
+            <a href="#hero" class="text-3xl font-decorative accent-text transition-colors duration-300 hover:text-[#991B1B]">P & J</a>
             <div class="space-x-4 text-sm hidden sm:flex">
                 <a href="#couple" class="hover:accent-text transition-colors duration-200">Our Story</a>
                 <a href="#events" class="hover:accent-text transition-colors duration-200">The Events</a>
@@ -144,23 +158,23 @@
     <!-- 1. Hero Section --><section id="hero" class="hero-bg flex flex-col items-center justify-center text-white text-center pt-24">
         <div class="p-6 md:p-10 bg-black bg-opacity-30 rounded-xl shadow-2xl backdrop-blur-sm">
             <p class="text-lg md:text-xl mb-2 tracking-widest uppercase">We're getting married!</p>
-            <h1 class="text-7xl md:text-9xl font-decorative mb-6 leading-tight">Pooja <span class="text-4xl mx-2">&</span> Jatin</h1>
+            <h1 class="text-7xl md:text-9xl font-decorative mb-6 leading-tight" style="text-shadow: 0 0 5px rgba(0,0,0,0.5);">Pooja <span class="text-4xl mx-2">&</span> Jatin</h1>
             <p class="text-2xl md:text-3xl font-semibold mb-8">25. November. 2025 | Jatganwara</p>
             
             <!-- Countdown Timer --><div id="countdown" class="flex justify-center space-x-4 md:space-x-8 text-white">
-                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg shadow-lg">
                     <span id="days" class="text-4xl md:text-5xl font-bold">00</span>
                     <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Days</span>
                 </div>
-                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg shadow-lg">
                     <span id="hours" class="text-4xl md:text-5xl font-bold">00</span>
                     <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Hours</span>
                 </div>
-                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg shadow-lg">
                     <span id="minutes" class="text-4xl md:text-5xl font-bold">00</span>
                     <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Mins</span>
                 </div>
-                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
+                <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg shadow-lg">
                     <span id="seconds" class="text-4xl md:text-5xl font-bold">00</span>
                     <span class="text-xs md:text-sm mt-1 uppercase tracking-wider">Secs</span>
                 </div>
@@ -174,23 +188,23 @@
             <h2 class="text-5xl font-decorative text-center accent-text mb-12">Our Story</h2>
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="order-2 md:order-1">
-                    <p class="text-lg mb-4">
+                    <p class="text-lg mb-4 text-gray-700">
                         Our path to marriage was paved by the blessings and wisdom of our families. Pooja and Jatin were first introduced through a mutual family connection, beginning a dialogue rooted in respect, shared values, and compatible aspirations.
                     </p>
-                    <p class="text-lg mb-4">
+                    <p class="text-lg mb-4 text-gray-700">
                         What followed was a beautiful period of discovery. Through video calls and occasional family gatherings, we exchanged thoughts on life, career, and future goals, realizing how perfectly our temperaments complement one another—Pooja’s spirited warmth balancing Jatin's grounded perspective.
                     </p>
-                    <p class="text-lg mb-4">
+                    <p class="text-lg mb-4 text-gray-700">
                         With the full support and happiness of our elders, our connection deepened from acquaintance to genuine affection, culminating in the joyous decision to unite our lives and families forever.
                     </p>
                     <p class="text-xl font-semibold mt-6 accent-text text-center md:text-left">With the blessings of our families, our journey begins.</p>
                 </div>
                 <div class="order-1 md:order-2">
                     <img 
-                        src="https://placehold.co/800x600/DDA0DD/FFFFFF?text=The+Happy+Couple" 
-                        onerror="this.onerror=null;this.src='https://placehold.co/800x600/DDA0DD/FFFFFF?text=The+Happy+Couple';"
+                        src="https://placehold.co/800x600/C4A484/FFFFFF?text=The+Happy+Couple" 
+                        onerror="this.onerror=null;this.src='https://placehold.co/800x600/C4A484/FFFFFF?text=The+Happy+Couple';"
                         alt="Pooja and Jatin smiling together" 
-                        class="w-full h-auto rounded-xl shadow-lg transform hover:scale-[1.02] transition duration-500 ease-in-out object-cover aspect-[4/3]"
+                        class="w-full h-auto rounded-xl shadow-lg card transform hover:scale-[1.02] transition duration-500 ease-in-out object-cover aspect-[4/3]"
                     >
                 </div>
             </div>
@@ -203,7 +217,7 @@
             
             <div class="grid md:grid-cols-3 gap-8">
                 
-                <!-- Event 1: Haldi & Mehendi (25 Nov Morning) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
+                <!-- Event 1: Haldi & Mehendi (25 Nov Morning) --><div class="bg-white p-6 rounded-xl shadow-xl card border accent-border border-opacity-30 flex flex-col justify-between">
                     <div>
                         <div class="text-4xl accent-text mb-4 mx-auto">
                             <!-- Placeholder Icon for Mehendi --><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -223,7 +237,7 @@
                     </a>
                 </div>
 
-                <!-- Event 2: Wedding Ceremony (25 Nov Afternoon) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 transform scale-[1.05] shadow-2xl z-10 flex flex-col justify-between">
+                <!-- Event 2: Wedding Ceremony (25 Nov Afternoon) --><div class="bg-white p-6 rounded-xl shadow-xl card border accent-border border-opacity-30 transform scale-[1.05] shadow-2xl z-10 flex flex-col justify-between">
                     <div>
                         <div class="text-4xl accent-text mb-4 mx-auto">
                             <!-- Placeholder Icon for Wedding Mandap --><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -243,7 +257,7 @@
                     </a>
                 </div>
 
-                <!-- Event 3: Reception (25 Nov Evening) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
+                <!-- Event 3: Reception (25 Nov Evening) --><div class="bg-white p-6 rounded-xl shadow-xl card border accent-border border-opacity-30 flex flex-col justify-between">
                     <div>
                         <div class="text-4xl accent-text mb-4 mx-auto">
                             <!-- Placeholder Icon for Party/Toast --><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -271,14 +285,14 @@
         <!-- 4. Gallery Section --><section id="gallery" class="fade-in">
             <h2 class="text-5xl font-decorative accent-text text-center mb-12">Moments</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+1" alt="Placeholder Wedding Photo 1" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
-                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+2" alt="Placeholder Wedding Photo 2" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
-                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+3" alt="Placeholder Wedding Photo 3" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
-                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+4" alt="Placeholder Wedding Photo 4" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
-                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+5" alt="Placeholder Wedding Photo 5" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
-                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+6" alt="Placeholder Wedding Photo 6" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
-                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+7" alt="Placeholder Wedding Photo 7" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
-                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+8" alt="Placeholder Wedding Photo 8" class="w-full h-full object-cover rounded-lg shadow-md aspect-square">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+1" alt="Placeholder Wedding Photo 1" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+2" alt="Placeholder Wedding Photo 2" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+3" alt="Placeholder Wedding Photo 3" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+4" alt="Placeholder Wedding Photo 4" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+5" alt="Placeholder Wedding Photo 5" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+6" alt="Placeholder Wedding Photo 6" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
+                <img src="https://placehold.co/400x400/8A3324/FFFFFF?text=Photo+7" alt="Placeholder Wedding Photo 7" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
+                <img src="https://placehold.co/400x400/BC8F8F/FFFFFF?text=Photo+8" alt="Placeholder Wedding Photo 8" class="w-full h-full object-cover rounded-lg shadow-md aspect-square card">
             </div>
         </section>
 
@@ -293,7 +307,7 @@
 
                 <h2 class="text-6xl font-decorative mb-12 note-heading-gradient">A Note for You</h2>
 
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl mx-auto border border-gray-100 max-w-2xl">
+                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl mx-auto border border-gray-100 max-w-2xl card">
                     <p class="text-lg text-gray-700 mb-6 leading-relaxed">
                         In this next chapter of our lives, the most precious gift we can receive is your **joyful presence**. Knowing you are celebrating alongside us fills our hearts with immense happiness.
                     </p>
@@ -311,7 +325,7 @@
                 </div>
                 
                 <!-- Link to Blessings Wall -->
-                <a href="#blessings-wall" class="inline-block mt-12 text-sm font-semibold accent-text hover:text-red-700 transition duration-150 underline">
+                <a href="#blessings-wall" class="inline-block mt-12 text-sm font-semibold accent-text hover:text-[#991B1B] transition duration-150 underline">
                     Go to Blessings Wall
                 </a>
             </div>
@@ -323,7 +337,7 @@
             <h2 class="text-5xl font-decorative accent-text mb-12">Leave a Blessing</h2>
             
             <!-- Form Container (max-w-md) -->
-            <div class="max-w-md mx-auto blessings-wall-bg p-8 rounded-xl shadow-2xl border accent-border border-opacity-20">
+            <div class="max-w-md mx-auto blessings-wall-bg p-8 rounded-xl shadow-2xl border accent-border border-opacity-30 card">
                 <p class="text-lg text-gray-600 mb-6">
                     Share your heartfelt wishes for Pooja and Jatin!
                 </p>
@@ -407,7 +421,7 @@
 
     <!-- Login Modal Structure (Hidden by default) -->
     <div id="loginModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 hidden flex items-center justify-center">
-        <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-sm m-4">
+        <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-sm m-4 card">
             <h3 class="text-2xl font-semibold mb-4 accent-text">Admin Login</h3>
             <form id="adminLoginForm">
                 <div class="mb-4">
@@ -423,7 +437,7 @@
                     <button type="button" onclick="window.hideLoginModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
                         Cancel
                     </button>
-                    <button type="submit" class="accent-bg text-white px-4 py-2 text-sm font-medium rounded-lg hover:bg-red-700">
+                    <button type="submit" class="accent-bg text-white px-4 py-2 text-sm font-medium rounded-lg hover:bg-[#991B1B]">
                         Log In
                     </button>
                 </div>
@@ -590,7 +604,7 @@
 
             if (blessingsToDisplay.length === 0) {
                 listContainer.insertAdjacentHTML('beforeend', `
-                    <p class="text-center text-gray-500 p-8 bg-white rounded-xl shadow-lg border border-gray-100 blessing-item">
+                    <p class="text-center text-gray-500 p-8 bg-white rounded-xl shadow-lg border border-gray-100 blessing-item card">
                         Be the first to share your blessing for Pooja and Jatin!
                     </p>
                 `);
@@ -653,7 +667,7 @@
 
 
                 const blessingHTML = `
-                    <div class="p-6 bg-white rounded-xl shadow-lg border ${statusClass} blessing-item transform transition duration-300 hover:shadow-xl hover:scale-[1.005]">
+                    <div class="p-6 bg-white rounded-xl shadow-lg border ${statusClass} blessing-item card transform transition duration-300 hover:shadow-xl hover:scale-[1.005]">
                         ${pinIcon}
                         <p class="text-xl font-decorative accent-text mb-3 leading-snug text-center ${isAdmin() && isHidden ? 'line-through' : ''}">
                             "${blessing.blessing}"
