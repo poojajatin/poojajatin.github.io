@@ -17,10 +17,11 @@
             scroll-padding-top: 6rem; /* Space for the fixed header */
         }
         
-        /* Custom accent color (Deep Rose Gold/Maroon) */
-        .accent-text { color: #8A3324; }
-        .accent-bg { background-color: #8A3324; }
-        .accent-border { border-color: #8A3324; }
+        /* --- NEW COLOR SCHEME: CRIMSON RED & GOLD --- */
+        /* Primary Accent Color: Rich Crimson (Traditional Shubh Laal) */
+        .accent-text { color: #991B1B; } 
+        .accent-bg { background-color: #991B1B; }
+        .accent-border { border-color: #991B1B; }
         
         /* Fade-in animation for sections */
         .fade-in {
@@ -33,11 +34,10 @@
             transform: translateY(0);
         }
 
-        /* Hero section background */
+        /* Hero section background reflecting rich Indian wedding tones */
         .hero-bg {
-            /* Using a more vibrant placeholder for better visual appeal */
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
-                        url('https://placehold.co/1920x1080/635147/FFFFFF/webp?text=Pooja+%26+Jatin');
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                        url('https://placehold.co/1920x1080/4A1700/FFD700/webp?text=North+Indian+Wedding');
             background-size: cover;
             background-position: center;
             height: 80vh; /* Adjust height for a better mobile view */
@@ -50,9 +50,9 @@
         }
         .animate-spin { animation: spin 1s linear infinite; }
 
-        /* Custom gradient button for "Send Your Blessing" */
+        /* Custom gradient button (Gold to Crimson) */
         .gradient-button {
-            background-image: linear-gradient(to right, #F59E0B, #DC2626); /* Tailwind yellow-500 to red-600 */
+            background-image: linear-gradient(to right, #FBBF24, #991B1B); /* Gold to Crimson */
             color: white;
             font-weight: bold;
             padding: 0.75rem 2rem;
@@ -72,7 +72,7 @@
             box-shadow: none;
         }
 
-        /* Custom input/textarea styling to match image */
+        /* Custom input/textarea styling (Kept light gold/yellow, which pairs well) */
         .form-input-custom {
             background-color: #FEF3C7; /* Light yellow background */
             border-color: #FCD34D; /* Yellow border */
@@ -87,20 +87,20 @@
 
         /* Custom section background for the blessings wall */
         .blessings-wall-bg {
-            background-color: #FDFCEF; /* Very light yellow/cream */
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FADFAD' fill-opacity='0.4'%3E%3Cpath d='M0 40L40 0H20L0 20V40ZM40 40V20L20 40H40Z'/%3E%3C/g%3E%3C/svg%3E");
+            background-color: #FDFCEF; /* Very light gold/cream */
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FADFAD' fill-opacity='0.6'%3E%3Cpath d='M0 40L40 0H20L0 20V40ZM40 40V20L20 40H40Z'/%3E%3C/g%3E%3C/svg%3E");
         }
 
-        /* Styles for the new "A Note for You" section */
+        /* Styles for the "A Note for You" section */
         .note-heading-gradient {
-            background-image: linear-gradient(to right, #F97316, #DC2626); /* Tailwind orange-500 to red-600 */
+            background-image: linear-gradient(to right, #FBBF24, #991B1B); /* Gold to Crimson */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             color: transparent; /* Fallback */
         }
         .note-section-bg {
-            background-color: #FEF2F2; /* Lightest pink background */
+            background-color: #FFFBEB; /* Lightest gold/cream background */
         }
         
         .blessing-item {
@@ -145,7 +145,7 @@
         <div class="p-6 md:p-10 bg-black bg-opacity-30 rounded-xl shadow-2xl backdrop-blur-sm">
             <p class="text-lg md:text-xl mb-2 tracking-widest uppercase">We're getting married!</p>
             <h1 class="text-7xl md:text-9xl font-decorative mb-6 leading-tight">Pooja <span class="text-4xl mx-2">&</span> Jatin</h1>
-            <p class="text-2xl md:text-3xl font-semibold mb-8">10. December. 2025 | Mumbai</p>
+            <p class="text-2xl md:text-3xl font-semibold mb-8">25. November. 2025 | Jatganwara</p>
             
             <!-- Countdown Timer --><div id="countdown" class="flex justify-center space-x-4 md:space-x-8 text-white">
                 <div class="flex flex-col items-center p-3 bg-white bg-opacity-20 rounded-lg">
@@ -198,12 +198,12 @@
         
         <!-- Divider --><hr class="accent-border my-16 opacity-30">
 
-        <!-- 3. Event Details Section (Completed and Detailed) --><section id="events" class="fade-in text-center">
+        <!-- 3. Event Details Section --><section id="events" class="fade-in text-center">
             <h2 class="text-5xl font-decorative accent-text mb-12">Celebrations</h2>
             
             <div class="grid md:grid-cols-3 gap-8">
                 
-                <!-- Event 1: Haldi & Mehendi (09 Dec) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
+                <!-- Event 1: Haldi & Mehendi (25 Nov Morning) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
                     <div>
                         <div class="text-4xl accent-text mb-4 mx-auto">
                             <!-- Placeholder Icon for Mehendi --><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -211,19 +211,19 @@
                             </svg>
                         </div>
                         <h3 class="text-3xl font-decorative accent-text mb-2">Haldi & Mehendi</h3>
-                        <p class="text-sm text-gray-500 mb-4">Tuesday, 09 December 2025</p>
+                        <p class="text-sm text-gray-500 mb-4">Tuesday, 25 November 2025</p>
                         <p class="text-base text-gray-600 mb-2">**Time:** 11:00 AM onwards</p>
-                        <p class="text-base font-medium">The Grand Ballroom, Oberoi Towers</p>
+                        <p class="text-base font-medium">The Royal Farmhouse, Jatganwara</p>
                         <p class="text-sm text-gray-500 italic mt-4">
                             A morning of joyous rituals, vibrant colors, and beautiful henna patterns! Dress code: Bright, festive traditional wear (yellow/green accents encouraged).
                         </p>
                     </div>
-                    <a href="https://maps.app.goo.gl/YourMapLinkHere" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
+                    <a href="https://www.google.com/maps/place/27%C2%B059'44.9%22N+76%C2%B011'41.8%22E/@27.995813,76.1923801,995m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d27.995813!4d76.194955?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
                         Get Directions
                     </a>
                 </div>
 
-                <!-- Event 2: Wedding Ceremony (10 Dec) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 transform scale-[1.05] shadow-2xl z-10 flex flex-col justify-between">
+                <!-- Event 2: Wedding Ceremony (25 Nov Afternoon) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 transform scale-[1.05] shadow-2xl z-10 flex flex-col justify-between">
                     <div>
                         <div class="text-4xl accent-text mb-4 mx-auto">
                             <!-- Placeholder Icon for Wedding Mandap --><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -231,19 +231,19 @@
                             </svg>
                         </div>
                         <h3 class="text-4xl font-decorative accent-text mb-2 font-bold">The Wedding</h3>
-                        <p class="text-lg font-semibold accent-text mb-4">Wednesday, 10 December 2025</p>
+                        <p class="text-lg font-semibold accent-text mb-4">Tuesday, 25 November 2025</p>
                         <p class="text-base text-gray-600 mb-2">**Muhurat:** 4:30 PM</p>
-                        <p class="text-base font-medium">The Sea View Lawn, Taj Land's End</p>
+                        <p class="text-base font-medium">The Royal Farmhouse, Jatganwara</p>
                         <p class="text-sm text-gray-500 italic mt-4">
-                            Witness the joining of two souls in a traditional Hindu ceremony followed by dinner. Dress code: Formal Indian attire.
+                            Witness the joining of two souls in a traditional Hindu ceremony. Dress code: Formal Indian attire.
                         </p>
                     </div>
-                    <a href="https://maps.app.goo.gl/YourMapLinkHere" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
+                    <a href="https://www.google.com/maps/place/27%C2%B059'44.9%22N+76%C2%B011'41.8%22E/@27.995813,76.1923801,995m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d27.995813!4d76.194955?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
                         View Location
                     </a>
                 </div>
 
-                <!-- Event 3: Reception (10 Dec Evening) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
+                <!-- Event 3: Reception (25 Nov Evening) --><div class="bg-white p-6 rounded-xl shadow-xl border accent-border border-opacity-20 flex flex-col justify-between">
                     <div>
                         <div class="text-4xl accent-text mb-4 mx-auto">
                             <!-- Placeholder Icon for Party/Toast --><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -251,15 +251,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
                             </svg>
                         </div>
-                        <h3 class="text-3xl font-decorative accent-text mb-2">Reception</h3>
-                        <p class="text-sm text-gray-500 mb-4">Wednesday, 10 December 2025</p>
+                        <h3 class="text-3xl font-decorative accent-text mb-2">Reception Dinner</h3>
+                        <p class="text-sm text-gray-500 mb-4">Tuesday, 25 November 2025</p>
                         <p class="text-base text-gray-600 mb-2">**Time:** 7:30 PM onwards</p>
-                        <p class="text-base font-medium">The Sea View Lawn, Taj Land's End</p>
+                        <p class="text-base font-medium">The Royal Farmhouse, Jatganwara</p>
                         <p class="text-sm text-gray-500 italic mt-4">
-                            Join us for an evening of music, dancing, and cocktails to celebrate! Dress code: Western Formals or Cocktail Attire.
+                            Join us for an evening of music, dancing, and celebratory dinner! Dress code: Western Formals or Cocktail Attire.
                         </p>
                     </div>
-                    <a href="https://maps.app.goo.gl/YourMapLinkHere" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
+                    <a href="https://www.google.com/maps/place/27%C2%B059'44.9%22N+76%C2%B011'41.8%22E/@27.995813,76.1923801,995m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d27.995813!4d76.194955?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="mt-4 inline-block text-sm text-center font-semibold text-blue-500 hover:text-blue-700 transition duration-150">
                         View Location
                     </a>
                 </div>
@@ -820,7 +820,7 @@
                 } else {
                     // Add new blessing
                     await addDoc(blessingsCollectionRef, data);
-                    showMessage("Thank you! Your blessing has been recorded.", 'success');
+                    showMessage("Thank thank you! Your blessing has been recorded.", 'success');
                 }
                 form.reset();
             } catch (e) {
@@ -920,7 +920,8 @@
          * Calculates and updates the countdown timer.
          */
         function updateCountdown() {
-            const countdownDate = new Date("Dec 10, 2025 16:30:00").getTime();
+            // New date: 25 November 2025 at 4:30 PM (Muhurat time)
+            const countdownDate = new Date("Nov 25, 2025 16:30:00").getTime();
             
             const now = new Date().getTime();
             const distance = countdownDate - now;
