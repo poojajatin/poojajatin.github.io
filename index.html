@@ -391,13 +391,46 @@
 
     </main>
 
-    <!-- Footer --><footer class="accent-bg text-white py-10">
+    <!-- Footer --><footer class="accent-bg text-white py-10 flex flex-col items-center">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p class="text-3xl font-decorative mb-2">With Love,</p>
             <p class="text-xl font-semibold mb-4">Pooja & Jatin</p>
-            <p class="text-sm opacity-80">We look forward to celebrating with you.</p>
+            <p class="text-sm opacity-80 mb-6">We look forward to celebrating with you.</p>
         </div>
+        
+        <!-- Admin Login Button -->
+        <button id="adminLoginBtn" onclick="window.showLoginModal()" 
+                class="text-xs bg-white text-gray-600 px-3 py-1 rounded-full shadow-md hover:shadow-lg transition duration-300">
+            Admin Login
+        </button>
     </footer>
+
+    <!-- Login Modal Structure (Hidden by default) -->
+    <div id="loginModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-sm m-4">
+            <h3 class="text-2xl font-semibold mb-4 accent-text">Admin Login</h3>
+            <form id="adminLoginForm">
+                <div class="mb-4">
+                    <label for="adminUsername" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="adminUsername" name="adminUsername" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                </div>
+                <div class="mb-6">
+                    <label for="adminPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="adminPassword" name="adminPassword" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                </div>
+                <div id="loginMessage" class="text-red-500 text-sm mb-4 hidden"></div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="window.hideLoginModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
+                        Cancel
+                    </button>
+                    <button type="submit" class="accent-bg text-white px-4 py-2 text-sm font-medium rounded-lg hover:bg-red-700">
+                        Log In
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- JavaScript for Countdown, Animations, and Firebase --><script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -409,8 +442,12 @@
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
         let app, db, auth;
         let userId = null; // Current authenticated user ID
-        let adminUserId = null; // The User ID used to load the app initially (assumed owner)
+        let adminUserId = 'NOT_LOGGED_IN'; // Identifier for the administrator
         let isAuthReady = false; // Flag to ensure actions wait for auth
+
+        // Hardcoded Credentials (DANGER: Only for simple demos. DO NOT USE IN PRODUCTION.)
+        const ADMIN_USERNAME = 'Yuvraj';
+        const ADMIN_PASSWORD = 'Yuvraj';
 
         // Gemini API Configuration
         const MAX_RETRIES = 3;
@@ -449,14 +486,6 @@
                     // Once authenticated (or anonymously signed in), set flag and user ID
                     userId = auth.currentUser?.uid || (typeof crypto !== 'undefined' ? crypto.randomUUID() : 'guest');
                     
-                    // Set the current user as the admin if it's the first time identifying the user
-                    if (!adminUserId) {
-                        adminUserId = userId;
-                        if (document.getElementById('admin-tools-display') && adminUserId === userId) {
-                             document.getElementById('admin-tools-display').classList.remove('hidden');
-                        }
-                    }
-                    
                     isAuthReady = true;
                     console.log("Authenticated User ID:", userId);
                     document.getElementById('user-id-display').textContent = `User ID: ${userId} | Admin ID: ${adminUserId}`;
@@ -468,6 +497,49 @@
             } catch (e) {
                 console.error("Firebase initialization failed:", e);
                 showMessage("Database connection failed. Blessing Wall feature is unavailable.", 'error');
+            }
+        }
+        
+        // --- Admin Login Modal Logic ---
+
+        window.showLoginModal = function() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('flex');
+            document.getElementById('loginMessage').classList.add('hidden');
+            document.getElementById('adminUsername').value = '';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        window.hideLoginModal = function() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('loginModal').classList.remove('flex');
+        }
+
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            const loginMessage = document.getElementById('loginMessage');
+            
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                // Successful Login: Set the current user ID as the admin ID
+                adminUserId = userId;
+                
+                // Refresh the display to show admin tools
+                if (document.getElementById('admin-tools-display')) {
+                    document.getElementById('admin-tools-display').classList.remove('hidden');
+                }
+                
+                // Hide modal and trigger data re-render
+                window.hideLoginModal();
+                // We don't need to manually call renderBlessings here as onSnapshot listener is already active
+                // However, we want to force a visual update now that admin rights are granted
+                fetchBlessingsRealtime();
+                showMessage("Admin access granted.", 'success');
+
+            } else {
+                loginMessage.textContent = "Invalid username or password.";
+                loginMessage.classList.remove('hidden');
             }
         }
         
@@ -499,6 +571,7 @@
          * Helper function to determine if the current user is the admin.
          */
         function isAdmin() {
+            // Check if the current user ID matches the dynamically set adminUserId
             return userId === adminUserId;
         }
 
@@ -637,7 +710,8 @@
         window.deleteBlessing = async function(docId) {
              if (!isAdmin() || !docId) return showMessage("Access denied.", 'error');
 
-            const confirmed = true; // Replace with a custom confirmation modal if needed
+            // Using a simple window.confirm replacement for demo purposes.
+            const confirmed = window.prompt("Type 'DELETE' to confirm deletion of this blessing.") === 'DELETE';
 
             if (confirmed) {
                 const blessingRef = doc(db, `artifacts/${appId}/public/data/blessings`, docId);
@@ -648,6 +722,8 @@
                     console.error("Error deleting blessing: ", e);
                     showMessage("Error deleting blessing. Check permissions.", 'error');
                 }
+            } else if (confirmed === false) {
+                 showMessage("Deletion cancelled.", 'info');
             }
         };
 
@@ -919,10 +995,14 @@
             // 3. Setup Fade-in Animations
             setupIntersectionObserver();
 
-            // 4. Attach Blessing Form Submission Listener
+            // 4. Attach Form Listeners
             const blessingsForm = document.getElementById('blessingsForm');
             if (blessingsForm) {
                 blessingsForm.addEventListener('submit', submitBlessing);
+            }
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            if (adminLoginForm) {
+                adminLoginForm.addEventListener('submit', handleAdminLogin);
             }
 
             // 5. Attach AI Message Generator Listener
@@ -935,6 +1015,8 @@
             window.updateBlessingStatus = updateBlessingStatus;
             window.pinBlessing = pinBlessing;
             window.deleteBlessing = deleteBlessing;
+            window.showLoginModal = showLoginModal;
+            window.hideLoginModal = hideLoginModal;
         };
 
     </script>
